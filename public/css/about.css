@@ -1,0 +1,112 @@
+/* GENERAL */
+
+body {
+	font-family: 'Montserrat', sans-serif;
+	background-color: #F4F4F4;
+}
+
+.container-fluid {
+	margin: 0;
+	padding: 0;
+}
+
+/* HEADER */
+header {
+	background-color: #945D60;
+}
+
+.logo {
+	float: left;
+}
+
+.navbar {
+	padding: 0;
+	height: 100%;
+}
+
+.menuButton {
+	line-height: px;
+	border: none;
+}
+
+.menuList, .menuList ul {
+	height: 100%;
+}
+
+.menuList ul li {
+	height: 56px;
+	line-height: 56px;
+}
+
+.menuOpt {
+	color: #FFFFFF;
+}
+.menuOpt:hover,
+.menuOpt:focus {
+	background-color: #724346;
+}
+
+.menuList {
+	overflow: hidden;
+}
+
+.menuList ul {
+	float: right;
+}
+
+.menuButton {
+}
+
+/* SEARCH DROPDOWN */
+#search {
+	max-width: 45px;
+	position: relative;
+}
+
+#search:hover,
+#search:focus {
+    cursor: pointer;
+}
+
+#searchBar {
+	display: none;
+	position: absolute;
+	z-index: 1;
+	right: 0;
+}
+
+/* CONTENT*/
+.content {
+	color: #626E60;
+	padding: 25px 0;
+}
+
+/* PROMO CARD */
+.promoCard {
+	border: 1px solid #626E60;
+	padding: 10px;
+	border-radius: 20px;
+}
+
+/* FOOTER */
+footer {
+	background-color: #945D60;
+	color: #FFFFFF;
+	padding: 15px 0;
+}
+
+footer .row {
+	height: 100%;
+}
+
+footer .col-md-12 {
+	height: 100%;
+}
+
+footer p {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 100%;
+	margin: 0;
+}
