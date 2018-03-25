@@ -23,23 +23,32 @@
         </div>
         <div class="l_news_inner">
             <div class="row" id="load-data">
-            @foreach($listRestaurant as $restaurant)
-                <div class="col-lg-4 col-md-6">
-                    <div class="l_news_item">
-                        <div class="l_news_img"><a href="#"><img class="img-fluid" src="{{ URL::asset('storage/restaurant_img/' . $restaurant['name']) }}" alt=""></a></div>
-                        <div class="l_news_content">
-                            <i class="fa fa-birthday-cake" aria-hidden="true"></i> {{ $restaurant['rating'] }}
-                            <a href="{{ URL::route('client-review', $restaurant['restaurant_id']) }}"><h4>{{ $restaurant['name'] }}</h4></a>
-                            <p style="word-break: break-all">{{  substr(strip_tags($restaurant->desc,'<pre>,<code>'),0,100) }}{{ strlen(strip_tags($restaurant->desc)) > 100 ? "..." : "" }}.</p>
-                            <a class="more_btn" href="{{ URL::route('client-review', $restaurant['restaurant_id']) }}">Go to Review</a>
+            @if ($listRestaurant->count() <= 0)
+                <div class="col-sm-12">
+                    Resto not found!
+                </div>
+            @endif
+            @if ($listRestaurant->count() > 0)
+                @foreach($listRestaurant as $restaurant)
+                    <div class="col-lg-4 col-md-6">
+                        <div class="l_news_item">
+                            <div class="l_news_img"><a href="#"><img class="img-fluid" src="{{ URL::asset('storage/restaurant_img/' . $restaurant['name']) }}" alt=""></a></div>
+                            <div class="l_news_content">
+                                <i class="fa fa-birthday-cake" aria-hidden="true"></i> {{ $restaurant['rating'] }}
+                                <a href="{{ URL::route('client-review', $restaurant['restaurant_id']) }}"><h4>{{ $restaurant['name'] }}</h4></a>
+                                <p style="word-break: break-all">{{  substr(strip_tags($restaurant->desc,'<pre>,<code>'),0,100) }}{{ strlen(strip_tags($restaurant->desc)) > 100 ? "..." : "" }}.</p>
+                                <a class="more_btn" href="{{ URL::route('client-review', $restaurant['restaurant_id']) }}">Go to Review</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            @endif
+            @if ($listRestaurant->count() <= 5)
                 <div class="col-sm-12">&nbsp</div>
                 <div id="remove-row" style="margin:auto">
                     <button id="btn-more" onclick="getLoadData()" data-id="{{ $restaurant->restaurant_id }}"> Load More </button>
                 </div>
+            @endif
             </div>
         </div>
     </div>

@@ -113,12 +113,12 @@ $('#add-voucher').submit(function()  {
         contentType: false,
         processData: false,
         success: function(data) {
-            console.log(data);
-            alert(data);
+            // console.log(data);
+            // alert(data);
         },
         error: function (ajaxContext) {
-            console.log(ajaxContext.responseText);
-            alert(ajaxContext.responseText);
+            // console.log(ajaxContext.responseText);
+            // alert(ajaxContext.responseText);
         }
     });
 });

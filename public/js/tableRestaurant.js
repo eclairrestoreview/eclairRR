@@ -159,12 +159,12 @@ $('#add-restaurant').submit(function()  {
         contentType: false,
         processData: false,
         success: function(data) {
-            console.log(data);
-            alert(data);
+            // console.log(data);
+            // alert(data);
         },
         error: function (ajaxContext) {
-            console.log(ajaxContext.responseText);
-            alert(ajaxContext.responseText);
+            // console.log(ajaxContext.responseText);
+            // alert(ajaxContext.responseText);
         }
     });
 });
@@ -196,8 +196,8 @@ $(function() {
             if($.trim(value) == '') return 'This field is required';
         },
         success: function(data) {
-            $(this).data('pk', 23);
-            console.log($(this).data('pk'));
+            // $(this).data('pk', 23);
+            // console.log($(this).data('pk'));
         }
       }
     );
