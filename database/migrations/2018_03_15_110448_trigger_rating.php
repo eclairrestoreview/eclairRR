@@ -49,11 +49,11 @@ class TriggerRating extends Migration
             RETURN NULL;
 
         END;
-        $update_rating$ LANGUAGE plpgsql;
-
+        $update_rating$ LANGUAGE plpgsql;');
+        DB::unprepared('
         CREATE TRIGGER update_rating AFTER INSERT OR DELETE
             ON review 
-            EXECUTE PROCEDURE update_rating();
+            EXECUTE FUNCTION update_rating();
             update_rating;');
     }
 
