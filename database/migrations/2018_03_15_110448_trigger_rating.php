@@ -14,40 +14,47 @@ class TriggerRating extends Migration
     public function up()
     {
         DB::unprepared('
-        CREATE TRIGGER trigger_rating_insert AFTER INSERT
-            ON review 
-            FOR EACH ROW 
-            BEGIN
-                SET @new_rating = NEW.rating;
-                SET @restaurant_id = NEW.restaurant_id;
-                SET @rating_restaurant = (SELECT rating FROM restaurant WHERE restaurant.restaurant_id = @restaurant_id);
-                SET @counter_rating = (SELECT counter_rating FROM restaurant WHERE restaurant.restaurant_id = @restaurant_id);
-                SET @rating_total = ((@rating_restaurant * @counter_rating) + @new_rating) / (@counter_rating + 1);
+        CREATE OR REPLACE FUNCTION update_rating() RETURNS TRIGGER
+            AS $update_rating$
+        DECLARE
+            new_rating          integer;
+            restaurant_id       integer;
+            rating_restaurant   integer;
+            counter_rating      integer;
+            rating_total        integer;
+        BEGIN
+            IF (TG_OP = "DELETE") THEN
+                new_rating = OLD.rating;
+                restaurant_id = OLD.restaurant_id;
+                rating_restaurant = (SELECT rating FROM restaurant WHERE restaurant.restaurant_id = restaurant_id);
+                counter_rating = (SELECT counter_rating FROM restaurant WHERE restaurant.restaurant_id = restaurant_id);
+                rating_total = ((rating_restaurant * counter_rating) - old_rating) / (counter_rating - 1);
 
                 UPDATE restaurant
-                SET restaurant.rating = @rating_total,
-                    restaurant.counter_rating = @counter_rating + 1
-                WHERE restaurant.restaurant_id = @restaurant_id;
-                
-            END;');
-        
-        DB::unprepared('
-        CREATE TRIGGER trigger_rating_delete AFTER DELETE
-            ON review 
-            FOR EACH ROW 
-            BEGIN
-                SET @old_rating = OLD.rating;
-                SET @restaurant_id = OLD.restaurant_id;
-                SET @rating_restaurant = (SELECT rating FROM restaurant WHERE restaurant.restaurant_id = @restaurant_id);
-                SET @counter_rating = (SELECT counter_rating FROM restaurant WHERE restaurant.restaurant_id = @restaurant_id);
-                SET @rating_total = ((@rating_restaurant * @counter_rating) - @old_rating) / (@counter_rating - 1);
+                SET restaurant.rating = rating_total,
+                    restaurant.counter_rating = counter_rating - 1
+                WHERE restaurant.restaurant_id = restaurant_id;
+            ELSIF (TG_OP = "INSERT") THEN
+                new_rating = NEW.rating;
+                restaurant_id = NEW.restaurant_id;
+                rating_restaurant = (SELECT rating FROM restaurant WHERE restaurant.restaurant_id = restaurant_id);
+                counter_rating = (SELECT counter_rating FROM restaurant WHERE restaurant.restaurant_id = restaurant_id);
+                rating_total = ((rating_restaurant * counter_rating) + new_rating) / (counter_rating + 1);
 
                 UPDATE restaurant
-                SET restaurant.rating = @rating_total,
-                    restaurant.counter_rating = @counter_rating - 1
-                WHERE restaurant.restaurant_id = @restaurant_id;
-                
-            END;');
+                SET restaurant.rating = rating_total,
+                    restaurant.counter_rating = counter_rating + 1
+                WHERE restaurant.restaurant_id = restaurant_id;
+            END IF;
+            RETURN NULL;
+
+        END;
+        $update_rating$ LANGUAGE plpgsql;
+
+        CREATE TRIGGER trigger_rating_insert AFTER INSERT OR DELETE
+            ON review 
+            EXECUTE PROCEDURE update_rating();
+            update_rating;');
     }
 
     /**
@@ -58,6 +65,6 @@ class TriggerRating extends Migration
     public function down()
     {
         DB::unprepared('DROP TRIGGER IF EXISTS trigger_rating_insert');
-        DB::unprepared('DROP TRIGGER IF EXISTS trigger_rating_delete');
+        DB::unprepared('DROP FUNCTION IF EXISTS update_rating');
     }
 }
