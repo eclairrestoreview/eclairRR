@@ -14,8 +14,8 @@ class TriggerRating extends Migration
     public function up()
     {
         DB::unprepared('
-        CREATE TRIGGER `trigger_rating_insert` AFTER INSERT
-            ON `review` 
+        CREATE TRIGGER trigger_rating_insert AFTER INSERT
+            ON review 
             FOR EACH ROW 
             BEGIN
                 SET @new_rating = NEW.rating;
@@ -32,8 +32,8 @@ class TriggerRating extends Migration
             END;');
         
         DB::unprepared('
-        CREATE TRIGGER `trigger_rating_delete` AFTER DELETE
-            ON `review` 
+        CREATE TRIGGER trigger_rating_delete AFTER DELETE
+            ON review 
             FOR EACH ROW 
             BEGIN
                 SET @old_rating = OLD.rating;
