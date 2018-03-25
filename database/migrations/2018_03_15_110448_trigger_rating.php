@@ -51,7 +51,7 @@ class TriggerRating extends Migration
         END;
         $update_rating$ LANGUAGE plpgsql;
 
-        CREATE TRIGGER trigger_rating_insert AFTER INSERT OR DELETE
+        CREATE TRIGGER update_rating AFTER INSERT OR DELETE
             ON review 
             EXECUTE PROCEDURE update_rating();
             update_rating;');
@@ -64,7 +64,7 @@ class TriggerRating extends Migration
      */
     public function down()
     {
-        DB::unprepared('DROP TRIGGER IF EXISTS trigger_rating_insert');
+        DB::unprepared('DROP TRIGGER IF EXISTS update_rating');
         DB::unprepared('DROP FUNCTION IF EXISTS update_rating');
     }
 }
