@@ -53,8 +53,7 @@ class TriggerRating extends Migration
         DB::unprepared('
         CREATE TRIGGER update_rating AFTER INSERT OR DELETE
             ON review 
-            EXECUTE PROCEDURE update_rating();
-            update_rating;');
+            EXECUTE PROCEDURE update_rating();');
     }
 
     /**
